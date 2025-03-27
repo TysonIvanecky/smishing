@@ -5,7 +5,7 @@ import java.util.List;
 
 public class SmishingDetector {
     private static final List<String> SMISHING_KEYWORDS = Arrays.asList(
-            "win", "congratulations", "free", "claim", "urgent", "click", "prize", "won", "gift", "cash"
+            "win", "congratulations", "free", "claim", "urgent", "click", "prize", "won", "gift", "cash", "overdue payment", "toll payment", "payment failure"
     );
 
     public static boolean isSmishingMessage(String message) {
