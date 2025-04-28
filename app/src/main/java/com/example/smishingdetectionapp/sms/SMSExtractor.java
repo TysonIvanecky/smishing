@@ -29,7 +29,7 @@ public class SMSExtractor {
         return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED;
     }
 
-    private boolean hasContactsPersmission() {
+    private boolean hasContactsPermission() {
         return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
     }
 
@@ -47,7 +47,7 @@ public class SMSExtractor {
 
     @Nullable
     private Cursor getContactsCursor(String sender){
-        if (!hasContactsPersmission()){
+        if (!hasContactsPermission()){
             return null;
         }
         // Get Contacts from the device
@@ -67,7 +67,8 @@ public class SMSExtractor {
             do {
                 String sender = cursor.getString(senderIndex);
                 String body = cursor.getString(bodyIndex);
-                SMSMessage smsMessage = new SMSMessage(sender, body);
+                int severity = SmishingDetector.getSmishingSeverity(body.toLowerCase());
+                SMSMessage smsMessage = new SMSMessage(sender, body, severity);
                 messages.add(smsMessage);
 
             }while (cursor.moveToNext());
@@ -96,7 +97,8 @@ public class SMSExtractor {
                     boolean isSmishing = SmishingDetector.isSmishingMessage(body.toLowerCase());
 
                     if (isSmishing) {
-                        SMSMessage smsMessage = new SMSMessage(sender, body);
+                        int severity = SmishingDetector.getSmishingSeverity(body.toLowerCase());
+                        SMSMessage smsMessage = new SMSMessage(sender, body, severity);
                         suspiciousMessages.add(smsMessage);
                     }
                 }
